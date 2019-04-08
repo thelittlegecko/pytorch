@@ -3,6 +3,7 @@
 #include <atomic>
 #include <cstddef>
 #include <exception>
+#include <numeric>
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -22,14 +23,14 @@ inline int64_t divup(int64_t x, int64_t y) {
   return (x + y - 1) / y;
 }
 
-inline int get_max_threads() {
-#ifdef _OPENMP
-  return omp_get_max_threads();
-#else
-  return 1;
-#endif
-}
+C10_API void init_num_threads();
 
+C10_API void set_num_threads(size_t n);
+
+C10_API size_t get_num_threads();
+
+// Returns the current thread number (starting from 0)
+// in the current parallel region
 inline int get_thread_num() {
 #ifdef _OPENMP
   return omp_get_thread_num();
